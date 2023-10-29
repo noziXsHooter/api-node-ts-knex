@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiquititas Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!--     <link rel="stylesheet" href="style.css"> -->
+</head>
+<style type="text/css">
+
+    #chat {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    input {
+        width: 100%;
+        max-width: 600px;
+        border: 1px solid #ddd;
+        height: 50px;
+        padding: 0 20px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    input:hover,
+    input:focus {
+        border: 1px solid rgb(151, 9, 1);
+    }
+
+    button {
+        width: 100%;
+        max-width: 100px;
+        height: 40px;
+        font-size: 14px;
+        background: rgb(151, 9, 1);
+        text-align: center;
+        font-weight: bold;
+        color: #FFF;
+        margin-top: 10px;
+        border-radius: 10px;
+    }
+
+    button:hover {
+        background: rgb(227, 84, 76);
+    }
+
+    .messages {
+        width: 80%;
+        max-width: 600px;
+        height: 200px;
+        margin: 20px 0;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .scrollable {
+        overflow: auto;
+        flex-direction: column-reverse;
+    }
+
+    .input-chat {
+        width: 80%;
+        border: 1px solid #ddd;
+    }
+
+    .wrapper {
+        width: 90%;
+    }
+
+    /* NEW DASHBOARD */
+
+    /* Estilos gerais */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+
+    /* Estilos do container principal */
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 2000px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Estilos do chat no centro */
+    .chat {
+        flex: 3;
+        background-color: #ffffff;
+        border-radius: 10px;
+        height: 520px;
+        padding: 10px;
+    }
+
+    /* Estilos dos blocos de informações climáticas nas laterais */
+    .info-block {
+        flex: 1;
+        background-color: #3498db;
+        color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 0 10px;
+    }
+
+    /* Estilos para os títulos dos blocos de informações */
+    .info-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    /* Estilos para os valores das informações climáticas */
+    .info-value {
+        font-size: 24px;
+    }
+
+    @media (max-width: 600px) {
+            /* Esconda os info-blocks quando a largura da tela for menor que 600px */
+            .info-block {
+                display: none;
+            }
+        }
+</style>
+
+<body>
+    <div class="container">
+        <div  id="info-block" class="info-block">
+            <div class="info-title"><strong>Clima</strong></div>
+            <div id="info-climate-left" class="info-value"></div>
+        </div>
+        <div class="chat">
+            <center>
+                <h1 style="color:brown;">Chiquititas</h1>
+            </center>
+            <form id="chat">
+                <div class="wrapper">
+                    <input class="input-chat" type="text" name="username" placeholder="Digite seu usuário">
+                    <div class="messages scrollable" name="messagecontainer"></div>
+                    <input class="input-chat" type="text" name="message" placeholder="Digite sua mensagem">
+                    <center><button type="submit">Enviar</button></center>
+                </div>
+            </form>
+        </div>
+        <div  id="info-block" class="info-block">
+            <div class="info-title">Clima</div>
+            <div id="info-climate-right" class="info-value"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var currentURL = window.location.href;
+        const novaURL = currentURL.replace(/:\d{4}.*/, ':5000'); // remove tudo após :5000
+        var socket = io(novaURL);
+        const messageInput = $('input[name="message"]');
+        const messageContainer = $('input[name="messagecontainer"]');
+        
+        console.log(novaURL);
+
+
+        fetch(novaURL+'/climatempo/leopoldina/now', {
+            method: 'GET', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const info = {"infoClimate": data};
+
+                renderClimate(info);
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+
+
+        function renderMessage(message) {
+            $('.messages').append('<div class="message"><strong>' + message.author + '</strong>: ' + message.message + '</div>')
+        }
+
+        function renderClimate(info) {
+            console.log(info);
+
+        $('#info-climate-left').html('<div class=""><strong>Cidade: </strong>'+ info.infoClimate.name + '<br>' + 
+            '<strong>Temperatura: </strong> '+ info.infoClimate.data.temperature + '°' + '<br>' + 
+            '<strong>Sensação: </strong> '+ info.infoClimate.data.sensation + '°' + '<br>' +
+            '<strong>Direção do Vento: </strong> '+ info.infoClimate.data.wind_direction + '<br>' + 
+            '<strong>Velocidade do Vento: </strong> '+ info.infoClimate.data.wind_velocity + 'km/h' +'<br>' + 
+            '<strong>Umidade: </strong> '+ info.infoClimate.data.humidity + '%' +'<br>' + 
+            '<strong>Condição: </strong> '+ info.infoClimate.data.condition + '<br>' + 
+            '<strong>Pressão: </strong>'+ info.infoClimate.data.pressure + '<br>' +
+            '</div>');
+        
+        $('#info-climate-right').html('<div class=""><strong>Cidade: </strong>'+ info.infoClimate.name + '<br>' + 
+            '<strong>Temperatura: </strong> '+ info.infoClimate.data.temperature + '°' + '<br>' + 
+            '<strong>Sensação: </strong> '+ info.infoClimate.data.sensation + '°' + '<br>' +
+            '<strong>Direção do Vento: </strong> '+ info.infoClimate.data.wind_direction + '<br>' + 
+            '<strong>Velocidade do Vento: </strong> '+ info.infoClimate.data.wind_velocity + 'km/h' +'<br>' + 
+            '<strong>Umidade: </strong> '+ info.infoClimate.data.humidity + '%' +'<br>' + 
+            '<strong>Condição: </strong> '+ info.infoClimate.data.condition + '<br>' + 
+            '<strong>Pressão: </strong>'+ info.infoClimate.data.pressure + '<br>' +
+            '</div>');
+        }
+
+        socket.on('previousMessages', function (messages) {
+            for (message of messages) {
+                renderMessage(message)
+            }
+        })
+
+        socket.on('receivedMessage', function (message) {
+            renderMessage(message)
+        })
+
+        socket.on('infoClimate', function (info) {
+            renderClimate(info)
+        })
+
+        $('#chat').submit(function (event) {
+            event.preventDefault();
+
+            var author = $('input[name=username]').val()
+            var message = $('input[name=message]').val()
+            console.log(author);
+            if (author.length && message.length) {
+                var messageObject = {
+                    author: author,
+                    message: message
+                }
+            }
+            renderMessage(messageObject)
+            socket.emit('sendMessage', messageObject)
+            messageInput.val('');
+            scrollToBottom()
+        })
+
+        function scrollToBottom() {
+            messageContainer.scrollTop(messageContainer[0].scrollHeight);
+        }
+
+    </script>
+</body>
+
+</html>

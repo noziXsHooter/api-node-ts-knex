@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela Front-End</title>
+    <style>
+        /* Estilos gerais */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        /* Estilos do container principal */
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Estilos do chat no centro */
+        .chat {
+            flex: 2;
+            background-color: #ffffff;
+            border-radius: 10px;
+            height: 500px;
+            padding: 20px;
+        }
+
+        /* Estilos dos blocos de informações climáticas nas laterais */
+        .info-block {
+            flex: 1;
+            background-color: #3498db;
+            color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 0 10px;
+        }
+
+        /* Estilos para os títulos dos blocos de informações */
+        .info-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Estilos para os valores das informações climáticas */
+        .info-value {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="info-block">
+            <div class="info-title">Clima</div>
+            <div class="info-value">Temperatura: 25°C</div>
+            <div class="info-value">Umidade: 60%</div>
+            <div class="info-value">Pressão Atmosférica: 1013 hPa</div>
+        </div>
+        <div class="chat">
+            <!-- Coloque aqui o conteúdo do seu chat -->
+            <h1>Chat</h1>
+            <p>Conversa do chat...</p>
+        </div>
+        <div class="info-block">
+            <div class="info-title">Clima</div>
+            <div class="info-value">Temperatura: 28°C</div>
+            <div class="info-value">Umidade: 55%</div>
+            <div class="info-value">Pressão Atmosférica: 1010 hPa</div>
+        </div>
+    </div>
+</body>
+</html>

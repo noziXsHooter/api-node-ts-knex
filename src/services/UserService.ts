@@ -1,6 +1,11 @@
 export class UserService {
     getUsers = () => {
-        const users = []
+        const users = [
+            {
+                id: "1"
+            }
+        ]
+        return users;
     }
 
     getUser = (id: number|string) => {

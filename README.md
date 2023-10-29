@@ -12,3 +12,9 @@ npm install --save http-status-codes
 npm install dotenv
 npm install knex
 npm install sqlite3
+npm install axios
+npm install ejs 
+npm install socket.io
+
+npm install multer
+npm install --save-dev @types/multer

@@ -1,0 +1,38 @@
+{
+    "infoClimate": {
+        "id": 8814,
+        "name": "Leopoldina",
+        "state": "MG",
+        "country": "BR  ",
+        "data": {
+            "temperature": 17,
+            "wind_direction": "NNW",
+            "wind_velocity": 9.8,
+            "humidity": 76.2,
+            "condition": "Poucas nuvens",
+            "pressure": 975,
+            "icon": "2",
+            "sensation": 17,
+            "date": "2023-09-17 08:16:47"
+        }
+    }
+}
+{
+    "infoClimate": {
+        "id": 8814,
+        "name": "Leopoldina",
+        "state": "MG",
+        "country": "BR  ",
+        "data": {
+            "temperature": 17,
+            "wind_direction": "NNW",
+            "wind_velocity": 9.8,
+            "humidity": 76.2,
+            "condition": "Poucas nuvens",
+            "pressure": 975,
+            "icon": "2",
+            "sensation": 17,
+            "date": "2023-09-17 08:11:46"
+        }
+    }
+}

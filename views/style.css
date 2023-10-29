@@ -1,0 +1,106 @@
+html, body {
+    height: 100%;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  #chat {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  input {
+    width: 600px;
+    border: 1px solid #ddd;
+    height: 50px;
+    padding: 0 20px;
+    font-size: 14px;
+  }
+  
+  button {
+    width: 600px;
+    height: 50px;
+    font-size: 14px;
+    background: #069;
+    text-align: center;
+    line-height: 50px;
+    font-weight: bold;
+    color: #FFF;
+    margin-top: 10px;
+  }
+  
+  .messages {
+    width: 600px;
+    height: 400px;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    padding: 20px;
+  }
+
+
+
+/*   DASHBOARD   */
+
+       /* Estilização da div principal */
+       .container {
+        width: 80%; /* Largura da div principal */
+        max-width: 700px; /* Largura máxima da div principal */
+        height: 350px; /* Altura da div principal */
+        background-color: #a90b0b; /* Cor de fundo da div principal */
+        display: flex; /* Define o display como flex para alinhar as divs internas horizontalmente */
+        justify-content: space-between; /* Distribui as divs internas com espaço entre elas */
+        align-items: center; /* Centraliza verticalmente as divs internas */
+        margin: 0 auto; /* Centraliza a div principal horizontalmente */
+        margin-top: 15%;
+    }
+
+    /* Estilização das divs internas retangulares */
+    .rectangle {
+        display: flex;
+        align-items: center; /* Centraliza verticalmente as divs internas */
+        flex-direction: column;
+        justify-content: space-between; /* Distribui as divs internas com espaço entre elas */
+        align-items: center; /* Centraliza verticalmente as divs internas */
+        margin: 0 auto; /* Centraliza a div principal horizontalmente */
+        width: 200px; /* Largura das divs internas */
+        height: 500px; /* Altura das divs internas */
+        background-color: #3498db; /* Cor de fundo das divs internas */
+        margin: 0; /* Remove a margem (espaço) entre as divs internas */
+        border: 1px #f0f0f0;
+        border-radius: 10px;
+        border-style: solid;
+    }
+
+    .mid-rectangle {
+        display: flex;
+        align-items: center; /* Centraliza verticalmente as divs internas */
+        justify-content: space-between; /* Distribui as divs internas com espaço entre elas */
+        align-items: center; /* Centraliza verticalmente as divs internas */
+        margin: 0 auto; /* Centraliza a div principal horizontalmente */
+        width: 270px; /* Largura das divs internas */
+        height: 500px; /* Altura das divs internas */
+        background-color: #3498db; /* Cor de fundo das divs internas */
+        margin: 0; /* Remove a margem (espaço) entre as divs internas */
+        border: 1px #f0f0f0;
+        border-radius: 10px;
+        border-style: solid;
+    }
+
+    .side-rectangle {
+        width: 150px; /* Largura das divs internas */
+        height: 200px; /* Altura das divs internas */
+        background-color: #333434; /* Cor de fundo das divs internas */
+        padding: 2px;
+        margin: auto;
+        margin: 5; /* Remove a margem (espaço) entre as divs internas */
+        border: 1 px#f0f0f0;
+        border-radius: 10px;
+        border-style: solid;
+    }
