@@ -154,7 +154,7 @@
     }
 
     .notification {
-        background-color: #4CAF50;
+        background-color: #028807;
         color: #fff;
         padding: 15px;
         border-radius: 5px;
@@ -181,7 +181,7 @@
       margin-top: 10px;
       margin-bottom: -5px;
       height: 5px;
-      background-color: #ddd;
+      background-color: #fffefe;
       border-radius: 5px;
       overflow: hidden;
     }
@@ -189,7 +189,7 @@
     .progress-bar {
       height: 100%;
       width: 0;
-      background-color: #f39c19;
+      background-color: #70ac73;
       border-radius: 5px;
       transition: width 0.3s ease;
     }
@@ -198,10 +198,9 @@
 
 <body>
 
-<!-- Botão para acionar a notificação -->
-<button onclick="triggerNotification()">Mostrar Notificação</button>
+    <!-- Botão para acionar a notificação -->
+    <button onclick="triggerNotification()">Mostrar Notificação</button>
 
-</div>
     <div class="container">
         <div id="info-block" class="info-block">
             <div class="info-title"><strong>Clima</strong></div>
@@ -227,6 +226,7 @@
             <div id="info-climate-right" class="info-value"></div>
         </div>
 
+        <!-- NOTIFICATION -->
         <div class="notification-container" id="notificationContainer">
             <div class="notification" id="notification">
               <span id="notificationText"></span>
@@ -249,7 +249,6 @@
         const messageContainer = $('input[name="messagecontainer"]');
 
         console.log(novaURL);
-
 
         fetch(novaURL + '/climatempo/leopoldina/now', {
             method: 'GET',
@@ -365,7 +364,7 @@
         }
 
         // Função para simular a mudança da variável e acionar a notificação
-        function triggerNotification(notification='Aqui, você pode substituir essa lógica pela mudança real da sua variável') {
+        function triggerNotification(notification='Aqui vai a mensagem de alerta superior direito da tela!!!') {
             // Aqui, você pode substituir essa lógica pela mudança real da sua variável
             const variavelQueMudou = true;
 
