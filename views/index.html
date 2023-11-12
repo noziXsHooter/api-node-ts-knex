@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <!--    <link rel="stylesheet" href="message-css.css"> -->
     <title>Chiquititas Chat</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js" type="text/javascript"></script>
 
     <!--     <link rel="stylesheet" href="style.css"> -->
 </head>
 <style type="text/css">
-
     #chat {
         display: flex;
         justify-content: center;
@@ -127,19 +127,82 @@
     }
 
     @media (max-width: 600px) {
-            /* Esconda os info-blocks quando a largura da tela for menor que 600px */
-            .info-block {
-                display: none;
-            }
+
+        /* Esconda os info-blocks quando a largura da tela for menor que 600px */
+        .info-block {
+            display: none;
         }
+    }
+
+
+    /* NOTIFICATIONS */
+ /*    .main-content {
+        padding: 20px;
+    } */
+
+    .notification-container {
+        width: 200px;
+        height: 50px;
+        position: fixed;
+        top: 0;
+        right: 0;
+        margin: 10px;
+        z-index: 1000;
+    }
+
+    .notification {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        display: none;
+    }
+
+    .notification button {
+        width: 20px;
+        height: 20px;
+        background-color: #fff;
+        color: #4CAF50;
+        border: none;
+        padding: 2px 5px;
+        cursor: pointer;
+        float: right;
+        margin-top: -2px;
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      margin-top: 10px;
+      margin-bottom: -5px;
+      height: 5px;
+      background-color: #ddd;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background-color: #f39c19;
+      border-radius: 5px;
+      transition: width 0.3s ease;
+    }
+
 </style>
 
 <body>
+
+<!-- Botão para acionar a notificação -->
+<button onclick="triggerNotification()">Mostrar Notificação</button>
+
+</div>
     <div class="container">
-        <div  id="info-block" class="info-block">
+        <div id="info-block" class="info-block">
             <div class="info-title"><strong>Clima</strong></div>
             <div id="info-climate-left" class="info-value"></div>
         </div>
+
         <div class="chat">
             <center>
                 <h1 style="color:brown;">Chiquititas</h1>
@@ -153,36 +216,50 @@
                 </div>
             </form>
         </div>
-        <div  id="info-block" class="info-block">
+
+        <div id="info-block" class="info-block">
             <div class="info-title">Clima</div>
             <div id="info-climate-right" class="info-value"></div>
         </div>
-    </div>
 
+        <div class="notification-container" id="notificationContainer">
+            <div class="notification" id="notification">
+              <span id="notificationText"></span>
+              <button onclick="closeNotification()">X</button>
+              <!-- Barra de carregamento de tempo -->
+              <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+              </div>
+            </div>
+          </div>
+        <!-- ============================= -->
+
+
+    <!--    <script type="text/javascript" src="message.js"></script> -->
     <script type="text/javascript">
         var currentURL = window.location.href;
         const novaURL = currentURL.replace(/:\d{4}.*/, ':5000'); // remove tudo após :5000
         var socket = io(novaURL);
         const messageInput = $('input[name="message"]');
         const messageContainer = $('input[name="messagecontainer"]');
-        
+
         console.log(novaURL);
 
 
-        fetch(novaURL+'/climatempo/leopoldina/now', {
-            method: 'GET', 
+        fetch(novaURL + '/climatempo/leopoldina/now', {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
-            })
+        })
             .then(response => {
                 if (!response.ok) {
-                throw new Error('Network response was not ok');
+                    throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(data => {
-                const info = {"infoClimate": data};
+                const info = { "infoClimate": data };
 
                 renderClimate(info);
             })
@@ -198,25 +275,25 @@
         function renderClimate(info) {
             console.log(info);
 
-        $('#info-climate-left').html('<div class=""><strong>Cidade: </strong>'+ info.infoClimate.name + '<br>' + 
-            '<strong>Temperatura: </strong> '+ info.infoClimate.data.temperature + '°' + '<br>' + 
-            '<strong>Sensação: </strong> '+ info.infoClimate.data.sensation + '°' + '<br>' +
-            '<strong>Direção do Vento: </strong> '+ info.infoClimate.data.wind_direction + '<br>' + 
-            '<strong>Velocidade do Vento: </strong> '+ info.infoClimate.data.wind_velocity + 'km/h' +'<br>' + 
-            '<strong>Umidade: </strong> '+ info.infoClimate.data.humidity + '%' +'<br>' + 
-            '<strong>Condição: </strong> '+ info.infoClimate.data.condition + '<br>' + 
-            '<strong>Pressão: </strong>'+ info.infoClimate.data.pressure + '<br>' +
-            '</div>');
-        
-        $('#info-climate-right').html('<div class=""><strong>Cidade: </strong>'+ info.infoClimate.name + '<br>' + 
-            '<strong>Temperatura: </strong> '+ info.infoClimate.data.temperature + '°' + '<br>' + 
-            '<strong>Sensação: </strong> '+ info.infoClimate.data.sensation + '°' + '<br>' +
-            '<strong>Direção do Vento: </strong> '+ info.infoClimate.data.wind_direction + '<br>' + 
-            '<strong>Velocidade do Vento: </strong> '+ info.infoClimate.data.wind_velocity + 'km/h' +'<br>' + 
-            '<strong>Umidade: </strong> '+ info.infoClimate.data.humidity + '%' +'<br>' + 
-            '<strong>Condição: </strong> '+ info.infoClimate.data.condition + '<br>' + 
-            '<strong>Pressão: </strong>'+ info.infoClimate.data.pressure + '<br>' +
-            '</div>');
+            $('#info-climate-left').html('<div class=""><strong>Cidade: </strong>' + info.infoClimate.name + '<br>' +
+                '<strong>Temperatura: </strong> ' + info.infoClimate.data.temperature + '°' + '<br>' +
+                '<strong>Sensação: </strong> ' + info.infoClimate.data.sensation + '°' + '<br>' +
+                '<strong>Direção do Vento: </strong> ' + info.infoClimate.data.wind_direction + '<br>' +
+                '<strong>Velocidade do Vento: </strong> ' + info.infoClimate.data.wind_velocity + 'km/h' + '<br>' +
+                '<strong>Umidade: </strong> ' + info.infoClimate.data.humidity + '%' + '<br>' +
+                '<strong>Condição: </strong> ' + info.infoClimate.data.condition + '<br>' +
+                '<strong>Pressão: </strong>' + info.infoClimate.data.pressure + '<br>' +
+                '</div>');
+
+            $('#info-climate-right').html('<div class=""><strong>Cidade: </strong>' + info.infoClimate.name + '<br>' +
+                '<strong>Temperatura: </strong> ' + info.infoClimate.data.temperature + '°' + '<br>' +
+                '<strong>Sensação: </strong> ' + info.infoClimate.data.sensation + '°' + '<br>' +
+                '<strong>Direção do Vento: </strong> ' + info.infoClimate.data.wind_direction + '<br>' +
+                '<strong>Velocidade do Vento: </strong> ' + info.infoClimate.data.wind_velocity + 'km/h' + '<br>' +
+                '<strong>Umidade: </strong> ' + info.infoClimate.data.humidity + '%' + '<br>' +
+                '<strong>Condição: </strong> ' + info.infoClimate.data.condition + '<br>' +
+                '<strong>Pressão: </strong>' + info.infoClimate.data.pressure + '<br>' +
+                '</div>');
         }
 
         socket.on('previousMessages', function (messages) {
@@ -226,7 +303,9 @@
         })
 
         socket.on('receivedMessage', function (message) {
-            renderMessage(message)
+            renderMessage(message);
+            console.log(message);
+            triggerNotification(message);
         })
 
         socket.on('infoClimate', function (info) {
@@ -254,6 +333,78 @@
         function scrollToBottom() {
             messageContainer.scrollTop(messageContainer[0].scrollHeight);
         }
+
+
+       /*  --------- NOTICATIONS  --------  */
+        // Função para mostrar a notificação
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+
+            if(typeof(message) === 'object'){
+                message = `${message.author} : ${message.message}`;
+            }
+
+            notificationText.innerText = message;
+            notification.style.display = 'block';
+
+            setTimeout(() => {
+                closeNotification();
+            }, 10000); // Fecha a notificação após 5 segundos (pode ser ajustado)
+        }
+
+        // Função para fechar a notificação
+        function closeNotification() {
+            const notification = document.getElementById('notification');
+            notification.style.display = 'none';
+        }
+
+        // Função para simular a mudança da variável e acionar a notificação
+        function triggerNotification(notification='notification') {
+            // Aqui, você pode substituir essa lógica pela mudança real da sua variável
+            const variavelQueMudou = true;
+
+            if (variavelQueMudou) {
+               // showNotification(notification); // Mensagem da notificação
+                showNotificationWithProgressBar(notification); // Mensagem da notificação
+            }
+        }
+
+        function showNotificationWithProgressBar(message, duration=5000) {
+            const notificationContainer = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const progressBar = document.getElementById('progressBar');
+
+            if(typeof(message) === 'object'){
+                message = `${message.author} : ${message.message}`;
+            }
+
+            notificationText.innerText = message;
+            notificationContainer.style.display = 'block';
+
+            // Reset a barra de progresso
+            progressBar.style.width = '0%';
+
+            // Animação da barra de progresso
+            let startTime = Date.now();
+            function animate() {
+                const currentTime = Date.now();
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+
+                progressBar.style.width = progress * 100 + '%';
+
+                if (progress < 1) {
+                requestAnimationFrame(animate);
+                } else {
+                // Fecha a notificação quando a animação da barra de progresso estiver completa
+                closeNotification();
+                }
+            }
+
+            // Inicia a animação
+            requestAnimationFrame(animate);
+    }
 
     </script>
 </body>

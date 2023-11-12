@@ -41,6 +41,8 @@ let infoClimate: any = {}
 
 let climaTempoService = new ClimaTempoService();
 
+climaTempoService.testConnection(); //Executa para testar conecxão com APIClimaTempo
+
 io.on('connection', socket => {
     console.log(`Socket conectado: ${socket.id}`);
 
@@ -76,7 +78,7 @@ setInterval(async function () {
 
     io.emit('infoClimate', { infoClimate });
     console.log("interval");
-}, 1000 * 60 * 30); //30min /climatempo/leopoldina/now
+}, 1000 * 60 * 2/* 30 */); //30min /climatempo/leopoldina/now
 
 // MQTT CONECTION
 const MQTTSubscriber = new MqttSubscriber();

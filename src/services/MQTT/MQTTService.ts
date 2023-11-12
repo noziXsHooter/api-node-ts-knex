@@ -8,7 +8,7 @@ import axios from 'axios';
 import { stringify } from 'querystring';
 import { sqliteConnect } from "../../database/index";
 
-interface IMessageLevel {
+interface IMQTTMessage {
     messageLevel: string,
     message: string,
     device: string,
@@ -86,11 +86,12 @@ export class MqttSubscriber {
         this.client = MQTT.connect(this.client.options);
     }
 
-    private handleMessage(topic: string, message: IMessageLevel) {
+    private handleMessage(topic: string, message: IMQTTMessage) {
         //Pega nivel da mensagem
         if (message.messageLevel) {
-            this.handleMessageLevel(message.messageLevel);
-            console.log('Mostrando a mensagem em HANDLE:' + message.messageLevel.toString() + ' TOPIC: ' + topic);
+            const levelMessage = this.handleMessageLevel(message.messageLevel);
+            console.log('Mostrando a mensagem em HANDLE:' + levelMessage + ' TOPIC: ' + topic);
+            //console.log('Mostrando a mensagem em HANDLE:' + message.messageLevel.toString() + ' TOPIC: ' + topic);
         }
         //Verifica dispositivo
         if (message.device) {
@@ -103,6 +104,14 @@ export class MqttSubscriber {
     }
 
     private handleMessageLevel(level: string) {
+        const mapLevelMessage:any = {
+            'level1': 'LEVEL 1: Mensagem comum  ',
+            'level2': 'LEVEL 2: Mensagem de alerta!',
+            'level3': 'LEVEL 3: Mensagem de perigo!!!'
+        }
+        const messageResult = mapLevelMessage[level] ?? 'Nível da mensagem inexistente!'
+
+
         switch (level) {
             case 'level1':
                 //SALVAR NO BANCO DE DADOS

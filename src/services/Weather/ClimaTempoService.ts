@@ -24,7 +24,7 @@ export class ClimaTempoService extends ClimaTempo {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
 
-  public baseUrl = process.env.CLIMATEMPO_BASE_URL;
+  public baseUrl = process.env.CLIMATEMPO_BASE_URL; // apiClimaTempo
   public urlLocales = `/api-manager/user-token/${this.apiKey}/locales`;
   public apiUrl72Hours: string = `/api/v1/forecast/locale/${this.cityId}/hours/72?token=${this.apiKey}`;
   public apiUrlCurrentWeather: string = `/api/v1/weather/locale/${this.cityId}/current?token=${this.apiKey}`;
@@ -78,6 +78,23 @@ export class ClimaTempoService extends ClimaTempo {
       "date": "2023-08-27 17:48:15"
     }
   }
+
+  
+testConnection = async () => {
+  try {
+    const url = this.baseUrl + `/api/v1/anl/synoptic/locale/BR?token=${this.apiKey}`;
+    const response = await axios.get(url, { headers: this.headers });
+
+    if (response.status === 200) {
+      const data = response.data;
+      console.log(data);
+    } else {
+      console.log(`Erro na solicitação: Código de Status ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Erro ao fazer a solicitação:', error);
+  }
+}
 
   getLeopoldinaWeatherData = async () => {
     try {
