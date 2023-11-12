@@ -1,4 +1,4 @@
-    // Função para mostrar a notificação
+    console.log('FROM MESSAGE.JS');// Função para mostrar a notificação
     function showNotification(message) {
         const notification = document.getElementById('notification');
         const notificationText = document.getElementById('notificationText');
