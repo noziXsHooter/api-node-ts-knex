@@ -15,6 +15,8 @@ import documentsRoute from './routes/documents.route';
 import { NetworkUtils } from './utils/NetworkUtils';
 import './services/MQTT/MQTTService';
 import { MqttSubscriber } from './services/MQTT/MQTTService';
+import { BardService } from './services/AI/TextAI/Bard/BardService';
+/* const Bard = require('bard-ai'); */
 
 const app = express();
 const server = http.createServer(app);
@@ -41,6 +43,10 @@ let infoClimate: any = {}
 
 let climaTempoService = new ClimaTempoService();
 
+// -----  TESTING BARD SERVICE ----- 
+//let myBard = new BardService();
+//myBard.testConnection();
+
 climaTempoService.testConnection(); //Executa para testar conecxão com APIClimaTempo
 
 io.on('connection', socket => {
@@ -48,10 +54,19 @@ io.on('connection', socket => {
 
     socket.emit('previousMessages', messages);
 
-    socket.on('sendMessage', data => {
+    socket.on('sendMessage', (data, room) => {
         messages.push(data);
+      // socket.broadcast.emit('receivedMessage', data);
+     console.log(data);
+     if(!room){
         socket.broadcast.emit('receivedMessage', data);
+     } else {
+        socket.to(room).emit('receivedMessage', data);
+     }
+      //  socket.to(data.room).emit('receivedMessage', data);
     });
+
+    io.to(socket.id).emit('seuSocketId', socket.id);
 
     /*    async function getFirstRenderInfo() {
            infoClimate = await climaTempoService.getLeopoldinaCurrentWeatherData(ClimaTempoService.leopoldina);
@@ -74,7 +89,7 @@ const localIP = networkUtils.getLocalIPAddress();
 console.log('Endereço IP local:', localIP);
 
 setInterval(async function () {
-    infoClimate = await climaTempoService.getLeopoldinaCurrentWeatherData(ClimaTempoService.leopoldina);
+   // infoClimate = await climaTempoService.getLeopoldinaCurrentWeatherData(ClimaTempoService.leopoldina);
 
     io.emit('infoClimate', { infoClimate });
     console.log("interval");

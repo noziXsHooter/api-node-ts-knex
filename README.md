@@ -18,3 +18,5 @@ npm install socket.io
 
 npm install multer
 npm install --save-dev @types/multer
+
+npm install bard-ai  

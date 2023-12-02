@@ -194,13 +194,54 @@
       transition: width 0.3s ease;
     }
 
+    /* Inicialmente, oculta o span */
+    #socketId {
+      display: none;
+      color:#028807;
+    }
+
+    .flex-container {
+        display: flex;
+        justify-content: space-between;
+    }   
+
+    .flex-container > div {
+        background-color: #f1f1f1;
+        text-align: center;
+    }
 </style>
 
 <body>
 
-    <!-- Botão para acionar a notificação -->
-    <button onclick="triggerNotification()">Mostrar Notificação</button>
+    <div class="flex-container">
+        <div>
+            <!-- Botão para acionar a notificação -->
+            <button onclick="triggerNotification()">Mostrar Notificação</button>
+        </div>
+        <div>
+            <!-- Adiciona um evento de mouse ao elemento span -->
+            <button onmousedown="showSocketId()" 
+                    onmouseup="hideSocketId()">
+                        Mostrar Cliente ID: 
+            </button>
+        </div>
+        <div>
+            <!-- Adiciona um evento de mouse ao elemento span -->
+            <button onclick="copytoClipBoard()">
+                Copiar Cliente ID: 
+            </button>
+        </div>
+    </div>
+    
+    <center>
+        <div id="socketId"></div>
+    </center>
 
+     <!-- Adiciona um evento de mouse ao elemento span -->
+<!--     <p onmouseover="showSocketId()" onmouseout="hideSocketId()">
+        Meu Socket ID: <span id="socketId"></span>
+    </p> -->
+    
     <div class="container">
         <div id="info-block" class="info-block">
             <div class="info-title"><strong>Clima</strong></div>
@@ -216,6 +257,7 @@
                     <input class="input-chat" type="text" name="username" placeholder="Digite seu usuário">
                     <div class="messages scrollable" name="messagecontainer"></div>
                     <input class="input-chat" type="text" name="message" placeholder="Digite sua mensagem">
+                    <input class="input-chat" type="text" name="room" placeholder="Escolha sua sala">
                     <center><button type="submit">Enviar</button></center>
                 </div>
             </form>
@@ -316,20 +358,28 @@
             renderClimate(info)
         })
 
+        // Receber o socket.id do servidor
+        socket.on('seuSocketId', (socketId) => {
+            console.log(socketId);
+            document.getElementById('socketId').innerText = socketId;
+        });
+
         $('#chat').submit(function (event) {
             event.preventDefault();
 
             var author = $('input[name=username]').val()
             var message = $('input[name=message]').val()
+            var room = $('input[name=room]').val()
             console.log(author);
             if (author.length && message.length) {
                 var messageObject = {
                     author: author,
-                    message: message
+                    message: message,
                 }
             }
             renderMessage(messageObject)
-            socket.emit('sendMessage', messageObject)
+            //socket.emit('sendMessage', messageObject);
+            socket.emit('sendMessage', messageObject, room);
             messageInput.val('');
             scrollToBottom()
         })
@@ -410,6 +460,38 @@
             requestAnimationFrame(animate);
     }
 
+       /*  --------- SOCKET CLIENT ID  --------  */
+        // Funções para mostrar/ocultar o span ao passar o mouse
+        function showSocketId() {
+            document.getElementById('socketId').style.display = 'inline';
+        }
+
+        function hideSocketId() {
+            document.getElementById('socketId').style.display = 'none';
+        }
+
+        // Função para copiar o conteúdo do span para a área de transferência
+        function copytoClipBoard() {
+            console.log('sdhkasdhsa');
+            const socketIdElement = document.getElementById('socketId');
+            const socketIdText = socketIdElement.innerText;
+
+            // Cria um elemento de área de transferência temporário
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = socketIdText;
+            document.body.appendChild(tempTextArea);
+
+            // Seleciona e copia o conteúdo
+            tempTextArea.select();
+            document.execCommand('copy');
+
+            // Remove o elemento temporário
+            document.body.removeChild(tempTextArea);
+
+            // Exibe uma mensagem ou executa ações adicionais se necessário
+            alert('Conteúdo copiado para a área de transferência!');
+        }
+    
     </script>
 </body>
 
