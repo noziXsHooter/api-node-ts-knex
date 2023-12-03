@@ -9,13 +9,14 @@ import usersRoute from './routes/users.route';
 import statusRoute from './routes/status.route';
 import weatherRoute from './routes/weather.route';
 import filesRoute from './routes/files.route';
+import devicesRoute from './routes/devices.route';
 import { TimeService } from './services/TimeService';
 import { ClimaTempoService } from "./services/Weather/ClimaTempoService";
 import documentsRoute from './routes/documents.route';
 import { NetworkUtils } from './utils/NetworkUtils';
 import './services/MQTT/MQTTService';
 import { MqttSubscriber } from './services/MQTT/MQTTService';
-import { BardService } from './services/AI/TextAI/Bard/BardService';
+//import { BardService } from './services/AI/TextAI/Bard/BardService';
 /* const Bard = require('bard-ai'); */
 
 const app = express();
@@ -106,6 +107,7 @@ app.use(statusRoute);
 app.use(weatherRoute);
 app.use(filesRoute);
 app.use(documentsRoute);
+app.use(devicesRoute);
 
 //const timeService = new TimeService()
 //timeService.executeGets(2)// Será executado dentro das horas passadas
