@@ -17,9 +17,6 @@ devicesRoute.post('/devices', deviceController.createDevice);
 
 devicesRoute.put('/devices/:id', deviceController.editDevice);
 
-devicesRoute.delete('/devices/:id', (req:Request<{ id:string }>, res:Response, next:NextFunction) => {
-    const id = req.params.id
-    res.status(StatusCodes.OK)
-})
+devicesRoute.delete('/devices/:id', deviceController.deleteDevice);
 
 export default devicesRoute

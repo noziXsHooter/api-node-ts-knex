@@ -1,14 +1,14 @@
 
-interface Devices {
-  cod: number;
-  device_id: string;
-}
-
-interface DeviceCreationData {
-  name: string;
-  serialNumber: string;
-  description: string;
-  // Outros campos do dispositivo, se necessário
+interface IDevice {
+  cod: number|string
+  device_id?: string;
+  description?: string;
+  token?: string;
+  locale?: string|object;
+  state?: string;
+  num_sensors?: number;
+  sensors?: object;
+  visible?: string;
 }
 
 interface DeviceDataRecord {
