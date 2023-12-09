@@ -5,11 +5,12 @@ import path from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import { Server } from 'socket.io';
-import usersRoute from './routes/users.route';
-import statusRoute from './routes/status.route';
-import weatherRoute from './routes/weather.route';
-import filesRoute from './routes/files.route';
-import devicesRoute from './routes/devices.route';
+//import usersRoute from './routes/users.route';
+//import statusRoute from './routes/status.route';
+//import weatherRoute from './routes/weather.route';
+//import filesRoute from './routes/files.route';
+//import devicesRoute from './routes/devices.route';
+import routes from './routes/routes';
 import { TimeService } from './services/TimeService';
 import { ClimaTempoService } from "./services/Weather/ClimaTempoService";
 import documentsRoute from './routes/documents.route';
@@ -102,12 +103,15 @@ const MQTTSubscriber = new MqttSubscriber();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+/* 
 app.use(usersRoute);
 app.use(statusRoute);
 app.use(weatherRoute);
 app.use(filesRoute);
 app.use(documentsRoute);
 app.use(devicesRoute);
+*/
+app.use('/', routes);
 
 //const timeService = new TimeService()
 //timeService.executeGets(2)// Será executado dentro das horas passadas

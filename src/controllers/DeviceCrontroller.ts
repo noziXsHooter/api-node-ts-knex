@@ -26,6 +26,15 @@ export class DeviceController {
     res.status(StatusCodes.CREATED).send(device)
   }
 
+  updateState = (req: Request, res: Response, next: NextFunction) => {
+    const deviceModel = new DeviceModel();
+   // const id = req.params.id
+    const modifiedDevice = req.body;
+  //  modifiedDevice.id = id
+    deviceModel.updateState(modifiedDevice);
+    res.status(StatusCodes.OK).send(modifiedDevice)
+  }
+
   editDevice = (req: Request<{ id: string | number }>, res: Response, next: NextFunction) => {
     //  const deviceService = new deviceService();
     const id = req.params.id

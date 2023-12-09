@@ -3,9 +3,10 @@ interface IDevice {
   cod: number|string
   device_id?: string;
   description?: string;
+  status?: string; //Is running?
+  state?: string; //Is operacional?
   token?: string;
   locale?: string|object;
-  state?: string;
   num_sensors?: number;
   sensors?: object;
   visible?: string;

@@ -36,12 +36,22 @@ export class DeviceModel {
       throw new Error(`Erro ao criar o dispositivo: ${error}`);
     }
   }
+  
+  async updateState(data: IDevice): Promise<any> {
+    try {
+      console.log(data);
+      const updatedCount = await sqliteConnect('devices').where('device_id', data.device_id).update({ state: data.state });
+      return updatedCount > 0;
+    } catch (error) {
+      throw new Error(`Erro ao criar o dispositivo: ${error}`);
+    }
+  }
 
   async getDeviceByCod(deviceCod: number): Promise<IDevice | undefined> {
     const device = await sqliteConnect('devices').where('cod', deviceCod).first();
     return device;
   }
-
+  
   async getAllDevices(): Promise<any> {
     try {
       const devices = await sqliteConnect('devices').select('*');
@@ -79,4 +89,5 @@ export class DeviceModel {
       throw new Error(`Erro ao excluir o dispositivo: ${error}`);
     }
   }
+
 }

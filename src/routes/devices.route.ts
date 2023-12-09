@@ -15,6 +15,8 @@ devicesRoute.get('/devices/:id', (req:Request<{ id:string }>, res:Response, next
 
 devicesRoute.post('/devices', deviceController.createDevice);
 
+devicesRoute.put('/devices/update-state', deviceController.updateState);
+
 devicesRoute.put('/devices/:id', deviceController.editDevice);
 
 devicesRoute.delete('/devices/:id', deviceController.deleteDevice);
